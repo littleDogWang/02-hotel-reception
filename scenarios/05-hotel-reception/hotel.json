@@ -1,0 +1,13 @@
+{
+  "version": "2026-10-12",
+  "hotel": "Agora Riverside Hotel",
+  "faq": [
+    { "question": "What time is check-in?", "answer": "Check-in starts at 15:00 and check-out is by 12:00." },
+    { "question": "Is breakfast available?", "answer": "Breakfast is served from 07:00 to 10:00 in the Riverside restaurant." },
+    { "question": "Is Wi-Fi available?", "answer": "Guest Wi-Fi is available throughout the hotel; the front desk can help if access fails." }
+  ],
+  "rooms": [
+    { "roomType": "standard-king", "date": "2026-10-20", "available": 4 },
+    { "roomType": "family-suite", "date": "2026-10-20", "available": 0 }
+  ]
+}
