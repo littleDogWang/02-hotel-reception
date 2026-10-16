@@ -70,6 +70,15 @@ Do not recreate Agora ConvoAI integration from memory. Provider schemas, SDK bui
 
 ## Internal / Subject to Change
 
+The hotel extension adds a local read-only room-status API backed by the
+repository's editable `hotel.json`. It supports single-night and 1–31-night stay
+queries. Inventory uses offsets from hotel-local today by default; explicit dates
+remain available for fixed-date tests. Checkout is excluded; incomplete data stays unknown. Optional
+`TOP_TEN_SCENARIO_TOOL_BASE_URL` publishes the same route to the cloud Agent as a
+REST tool; local HTTP testing does not depend on it. The hotel extension has no
+booking writes or actual human transfer. See the [hotel guide](../../scenarios/05-hotel-reception/README.md).
+
+
 - Visual styling and copy in the quickstart UI.
 - The exact reseller defaults for STT, LLM, and TTS models.
 - Connection issue display heuristics and metric chip presentation.
@@ -81,3 +90,10 @@ Do not recreate Agora ConvoAI integration from memory. Provider schemas, SDK bui
 3. Run `pnpm run doctor` and `pnpm run dev`.
 4. Validate with `pnpm run verify` before sharing modifications.
 5. Customize agent behavior and UI using the supported surfaces above.
+
+
+## Local conversation and optional tools
+
+Default conversations append hotel.json FAQ, room types and dated fictional room counts to the prompt. dayOffset is resolved against the hotel-local date at session start. For a stay, include check-in, exclude check-out and take the minimum nightly count; missing dates are unknown. No booking or callback is submitted. With a public HTTPS tool origin, omit inline counts and require successful room-status results; tool failure cannot fall back to fixed counts.
+
+TOP_TEN_SCENARIO_TOOL_BASE_URL is optional. Only an explicitly configured public HTTPS endpoint enables tools; malformed, HTTP, localhost and local/private origins leave tools disabled. URL validation does not prove network reachability. No tunnel, knowledge base or database is needed for the default conversation. Local checks do not establish live speech or cloud callback acceptance.

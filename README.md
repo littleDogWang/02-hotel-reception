@@ -8,6 +8,12 @@ Build a production-style voice agent in minutes with Next.js and the Agora Conve
 
 ## Prerequisites
 
+For this repository's hotel scenario, see [local room-status API and editable sample data](scenarios/05-hotel-reception/README.md).
+The API uses this repository's `hotel.json` and supports single nights or check-in/check-out stays.
+Local HTTP checks work without a cloud Agent. To let the cloud Agent call the same
+API, set `TOP_TEN_SCENARIO_TOOL_BASE_URL` to this app's reachable HTTPS origin.
+
+
 - [Node.js 22+](https://nodejs.org/en/download/)
 - [pnpm](https://pnpm.io/installation)
 - [Agora CLI](https://github.com/AgoraIO-Community/cli)
@@ -198,3 +204,10 @@ Please do **not** open public issues for security reports. Email security@agora.
 ## License
 
 Released under the [MIT License](./LICENSE).
+
+
+## Local conversation and optional tools
+
+Default conversations append hotel.json FAQ, room types and dated fictional room counts to the prompt. dayOffset is resolved against the hotel-local date at session start. For a stay, include check-in, exclude check-out and take the minimum nightly count; missing dates are unknown. No booking or callback is submitted. With a public HTTPS tool origin, omit inline counts and require successful room-status results; tool failure cannot fall back to fixed counts.
+
+TOP_TEN_SCENARIO_TOOL_BASE_URL is optional. Only an explicitly configured public HTTPS endpoint enables tools; malformed, HTTP, localhost and local/private origins leave tools disabled. URL validation does not prove network reachability. No tunnel, knowledge base or database is needed for the default conversation. Local checks do not establish live speech or cloud callback acceptance.

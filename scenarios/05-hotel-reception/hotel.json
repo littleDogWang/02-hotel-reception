@@ -1,13 +1,38 @@
 {
-  "version": "2026-10-12",
+  "version": "relative-days-v1",
   "hotel": "Agora Riverside Hotel",
+  "timeZone": "Asia/Shanghai",
+  "roomTypes": [
+    { "id": "standard-king", "name": "Standard king room" },
+    { "id": "standard-twin", "name": "Standard twin room" },
+    { "id": "family-suite", "name": "Family suite" }
+  ],
   "faq": [
     { "question": "What time is check-in?", "answer": "Check-in starts at 15:00 and check-out is by 12:00." },
     { "question": "Is breakfast available?", "answer": "Breakfast is served from 07:00 to 10:00 in the Riverside restaurant." },
     { "question": "Is Wi-Fi available?", "answer": "Guest Wi-Fi is available throughout the hotel; the front desk can help if access fails." }
   ],
   "rooms": [
-    { "roomType": "standard-king", "date": "2026-10-20", "available": 4 },
-    { "roomType": "family-suite", "date": "2026-10-20", "available": 0 }
+    { "roomType": "standard-king", "dayOffset": 0, "available": 4 },
+    { "roomType": "standard-king", "dayOffset": 1, "available": 2 },
+    { "roomType": "standard-king", "dayOffset": 2, "available": 0 },
+    { "roomType": "standard-king", "dayOffset": 3, "available": 3 },
+    { "roomType": "standard-king", "dayOffset": 4, "available": 4 },
+    { "roomType": "standard-king", "dayOffset": 5, "available": 1 },
+    { "roomType": "standard-king", "dayOffset": 6, "available": 2 },
+    { "roomType": "standard-twin", "dayOffset": 0, "available": 3 },
+    { "roomType": "standard-twin", "dayOffset": 1, "available": 3 },
+    { "roomType": "standard-twin", "dayOffset": 2, "available": 1 },
+    { "roomType": "standard-twin", "dayOffset": 3, "available": 2 },
+    { "roomType": "standard-twin", "dayOffset": 4, "available": 2 },
+    { "roomType": "standard-twin", "dayOffset": 5, "available": 0 },
+    { "roomType": "standard-twin", "dayOffset": 6, "available": 1 },
+    { "roomType": "family-suite", "dayOffset": 0, "available": 1 },
+    { "roomType": "family-suite", "dayOffset": 1, "available": 0 },
+    { "roomType": "family-suite", "dayOffset": 2, "available": 2 },
+    { "roomType": "family-suite", "dayOffset": 3, "available": 1 },
+    { "roomType": "family-suite", "dayOffset": 4, "available": 0 },
+    { "roomType": "family-suite", "dayOffset": 5, "available": 1 },
+    { "roomType": "family-suite", "dayOffset": 6, "available": 1 }
   ]
 }

@@ -1,23 +1,31 @@
-# 酒店接待验收标准
+# Hotel reception acceptance criteria
 
-## 必须通过
+## Required checks
 
-- 静态 FAQ 问题能直接回答。
-- 房态问题会调用模拟查询并使用返回数据。
-- 不存在房型或查询失败时不虚构可用房间。
-- 用户要求预订时，Agent 区分“已提交人工请求”和“预订已确认”。
-- 转人工时保留入住日期、房型和用户诉求。
+- Static FAQ questions receive direct answers.
+- Availability questions invoke the simulated lookup and use its response.
+- Missing room types or failed lookups do not produce fabricated availability.
+- For booking requests, the Agent explains that no booking has been created and suggests contacting the front desk.
+- The Agent never claims it has submitted a callback or initiated a human transfer.
+- A stay includes check-in and excludes checkout; availability is the minimum nightly count.
+- Local HTTP results match the editable `hotel.json`; missing records are unknown, not zero.
 
-## 推荐用例
+## Suggested cases
 
-1. 查询入住时间和早餐政策。
-2. 查询指定日期房态。
-3. 指定房型无房。
-4. PMS mock 超时。
-5. 请求预订并确认只是人工回拨。
+1. Ask about check-in time and breakfast policy.
+2. Check availability for a specified date.
+3. Request a room type with no availability.
+4. Simulate a PMS mock timeout.
+5. Request a reservation and confirm that neither a booking nor a human callback is claimed.
+6. Check standard king rooms from today to the day after tomorrow: two rooms across two occupied nights.
+7. Check family suites for the same stay: zero due to tomorrow being sold out.
+8. Check today + 6 days to today + 8 days: unknown because today + 7 days has no record.
+9. Modify an inventory count in `hotel.json` during local development; repeat the HTTP query and verify the changed count, then restore the fixture.
+10. Simulate December, month/year boundaries and hotel-local midnight; the same offset counts must resolve to the corresponding calendar dates without modifying JSON.
 
-## 证据
+## Evidence
 
-- FAQ/房态 fixture。
-- 工具返回和最终话术。
-- 转人工上下文记录。
+- FAQ/availability fixtures.
+- Tool responses and final statements.
+- Local HTTP responses and `pnpm run verify:scenario` output.
+- Actual cloud tool calls and spoken transcripts remain separate acceptance work.

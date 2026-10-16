@@ -35,6 +35,16 @@ The base `.env.local` contract contains only these Agora credentials. Agent beha
 
 ## Primary Commands
 
+Hotel scenario: `hotel.json` contains editable local FAQ and rolling sample inventory.
+Inventory `dayOffset` values resolve from hotel-local today on every request;
+the default sample does not expire with a calendar month.
+The local room-status route works without cloud credentials. Cloud tool calls
+add optional `TOP_TEN_SCENARIO_TOOL_BASE_URL` pointing to this app's reachable
+HTTPS origin. Restart after env changes and start a new conversation. Never
+use a local-only URL as evidence that the cloud Agent can reach it.
+See the [hotel guide](../../../scenarios/05-hotel-reception/README.md).
+
+
 ```bash
 pnpm run dev
 pnpm run lint

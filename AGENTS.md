@@ -2,7 +2,35 @@
 
 This guide is for coding agents making changes in `agent-quickstart-nextjs`.
 
+## Shared scenario UI requirements
+
+These three requirements apply to every scenario and are mandatory for UI implementation and acceptance:
+
+1. **Use a scenario-specific initial Dialog**: its title, description, primary action, loading/error messages and accessibility labels must explain the current scenario. Use a task-specific action instead of a generic Start Conversation entry.
+2. **Keep the scenario identity visible**: after closing the initial Dialog, the scenario name, identifier and short purpose must remain visible in the desktop and mobile interface. Activity status must not replace the scenario name.
+3. **Use our UIkit components**: adopt actual component source and the accompanying theme/styles from [shczhen/agent-ui](https://github.com/shczhen/agent-ui), connected to real session data and actions. A visual imitation or continued use of the previous UIkit alone does not satisfy this requirement.
+
+Inspect the rendered initial Dialog and main interface, and verify actual UIkit component usage. Each scenario plan specifies its own copy, identity and component mapping.
+
+The shared specification lives at `scenario-repos/SCENARIO_UI_RULES.md` in the workspace (`../SCENARIO_UI_RULES.md` relative to this file). This section contains all three minimum requirements and remains usable when the repository is cloned independently. Synchronize this section across repositories when shared rules change. Identify the 00 base scenario as a basic voice demo.
+
+## Repository language
+
+Use English for repository content, including documentation, code comments, UI copy and examples. Keep future additions and edits free of Chinese text.
+
 ## How to Load
+
+Hotel scenario data lives in `scenarios/05-hotel-reception/hotel.json`; keep it
+self-contained. The local room-status API supports `room_type` plus `date`, or
+`check_in`/`check_out` for 1–31 nights (checkout excluded). Missing data is unknown,
+not zero. Inventory uses `dayOffset` from hotel-local today by default so it does
+not expire; explicit `date` rows are allowed for fixed-date tests. Do not put both
+fields on a row or create duplicate resolved dates. `lookup_room_status` uses the
+same API and reads one night per call.
+Inventory stays out of the prompt; FAQ, room IDs and the hotel-local current date
+are included. Do not claim booking, callback submission or human transfer: no
+such action tool exists. Run `pnpm run verify:scenario` after hotel changes.
+
 
 This repository uses progressive disclosure documentation. Docs live under `docs/ai/` in three levels.
 
@@ -219,3 +247,10 @@ Before finishing a change:
 | fix docs        | Close findings from a docs review or test run                |
 
 The generator and tester live in the [AgoraIO-Community/ai-devkit](https://github.com/AgoraIO-Community/ai-devkit) skill set. See the [progressive disclosure standard](https://github.com/AgoraIO-Community/ai-devkit/blob/main/docs/progressive-disclosure-standard.md) for the full specification.
+
+
+## Local conversation and optional tools
+
+Default conversations append hotel.json FAQ, room types and dated fictional room counts to the prompt. dayOffset is resolved against the hotel-local date at session start. For a stay, include check-in, exclude check-out and take the minimum nightly count; missing dates are unknown. No booking or callback is submitted. With a public HTTPS tool origin, omit inline counts and require successful room-status results; tool failure cannot fall back to fixed counts.
+
+TOP_TEN_SCENARIO_TOOL_BASE_URL is optional. Only an explicitly configured public HTTPS endpoint enables tools; malformed, HTTP, localhost and local/private origins leave tools disabled. URL validation does not prove network reachability. No tunnel, knowledge base or database is needed for the default conversation. Local checks do not establish live speech or cloud callback acceptance.
