@@ -18,7 +18,7 @@ export function getScenarioPrompt(_scenarioId?: string, now = new Date(), toolsE
   } : {
     ...selected,
     workflow: 'Answer hotel policy questions from the FAQ. For a stay, collect exact check-in/check-out dates and room type; clarify king versus twin. Use the dated local inventory below for every occupied night, including check-in and excluding check-out. The stay count is the minimum nightly count, never the sum. Missing dates are unknown, not sold out. Explain that these are fixed fictional counts. Collect room and date preferences and summarize them verbally; no reservation or callback can be submitted.',
-    fixtureSummary: `Hotel: ${hotelData.hotel}. Verified FAQ:\n${formatHotelFaqForPrompt()}\nRoom types: ${JSON.stringify(hotelData.roomTypes)}\nLocal room inventory: ${JSON.stringify(inventory)}\nNo tools are configured. Do not call tools, claim live PMS access, save a request, reserve a room, or promise a transfer.`,
+    fixtureSummary: `Hotel: ${hotelData.hotel}, ${hotelData.location}. Verified FAQ:\n${formatHotelFaqForPrompt()}\nRoom types: ${JSON.stringify(hotelData.roomTypes)}\nLocal room inventory: ${JSON.stringify(inventory)}\nNo tools are configured. Do not call tools, claim live PMS access, save a request, reserve a room, or promise a transfer.`,
   };
   return `${formatScenarioPrompt(promptConfig)}\n\n# Hotel-local date\nToday is ${today} (${weekday}) in ${HOTEL_TIME_ZONE}. Resolve relative dates using this date. Confirm the exact check-in and check-out dates before checking a stay.`;
 }

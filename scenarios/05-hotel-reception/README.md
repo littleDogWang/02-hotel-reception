@@ -45,7 +45,7 @@ Set `origin` to your local server's port if it differs from 3000.
 node --input-type=module <<'JS'
 const origin = 'http://localhost:3000';
 const today = new Intl.DateTimeFormat('en-CA', {
-  timeZone: 'Asia/Shanghai', year: 'numeric', month: '2-digit', day: '2-digit',
+  timeZone: 'America/New_York', year: 'numeric', month: '2-digit', day: '2-digit',
 }).format(new Date());
 const checkout = new Date(`${today}T00:00:00Z`);
 checkout.setUTCDate(checkout.getUTCDate() + 2);
@@ -119,3 +119,7 @@ These checks do not establish successful cloud HTTP access or a real spoken conv
 Default conversations append hotel.json FAQ, room types and dated fictional room counts to the prompt. dayOffset is resolved against the hotel-local date at session start. For a stay, include check-in, exclude check-out and take the minimum nightly count; missing dates are unknown. No booking or callback is submitted. With a public HTTPS tool origin, omit inline counts and require successful room-status results; tool failure cannot fall back to fixed counts.
 
 TOP_TEN_SCENARIO_TOOL_BASE_URL is optional. Only an explicitly configured public HTTPS endpoint enables tools; malformed, HTTP, localhost and local/private origins leave tools disabled. URL validation does not prove network reachability. No tunnel, knowledge base or database is needed for the default conversation. Local checks do not establish live speech or cloud callback acceptance.
+
+## U.S. example data
+
+The fictional hotel is in Boston, Massachusetts. Its rolling inventory, relative dates and policy times use `America/New_York` (U.S. Eastern Time), including daylight saving time.

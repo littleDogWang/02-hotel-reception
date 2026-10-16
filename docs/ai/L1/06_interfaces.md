@@ -128,3 +128,7 @@ From `types/conversation.ts` (high-use):
 Default conversations append hotel.json FAQ, room types and dated fictional room counts to the prompt. dayOffset is resolved against the hotel-local date at session start. For a stay, include check-in, exclude check-out and take the minimum nightly count; missing dates are unknown. No booking or callback is submitted. With a public HTTPS tool origin, omit inline counts and require successful room-status results; tool failure cannot fall back to fixed counts.
 
 TOP_TEN_SCENARIO_TOOL_BASE_URL is optional. Only an explicitly configured public HTTPS endpoint enables tools; malformed, HTTP, localhost and local/private origins leave tools disabled. URL validation does not prove network reachability. No tunnel, knowledge base or database is needed for the default conversation. Local checks do not establish live speech or cloud callback acceptance.
+
+## U.S. example data
+
+The fictional hotel is in Boston, Massachusetts. Its rolling inventory, relative dates and policy times use `America/New_York` (U.S. Eastern Time), including daylight saving time.

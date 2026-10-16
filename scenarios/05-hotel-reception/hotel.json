@@ -1,15 +1,16 @@
 {
-  "version": "relative-days-v1",
+  "version": "relative-days-us-v1",
   "hotel": "Agora Riverside Hotel",
-  "timeZone": "Asia/Shanghai",
+  "location": "Boston, MA, United States",
+  "timeZone": "America/New_York",
   "roomTypes": [
     { "id": "standard-king", "name": "Standard king room" },
     { "id": "standard-twin", "name": "Standard twin room" },
     { "id": "family-suite", "name": "Family suite" }
   ],
   "faq": [
-    { "question": "What time is check-in?", "answer": "Check-in starts at 15:00 and check-out is by 12:00." },
-    { "question": "Is breakfast available?", "answer": "Breakfast is served from 07:00 to 10:00 in the Riverside restaurant." },
+    { "question": "What time is check-in?", "answer": "Check-in starts at 3:00 PM and check-out is by 12:00 PM (noon), U.S. Eastern Time." },
+    { "question": "Is breakfast available?", "answer": "Breakfast is served from 7:00 AM to 10:00 AM in the Riverside restaurant, U.S. Eastern Time." },
     { "question": "Is Wi-Fi available?", "answer": "Guest Wi-Fi is available throughout the hotel; the front desk can help if access fails." }
   ],
   "rooms": [

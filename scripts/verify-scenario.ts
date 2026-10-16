@@ -64,17 +64,17 @@ async function verifyRoomStatus() {
   const toolResponse = await GET(new Request(url));
   assert.equal((await toolResponse.json()).room.available, 4, 'The registered tool URL must point to the local handler');
 
-  const prompt = getScenarioPrompt(config.id, new Date('2026-10-15T17:00:00Z'));
-  assert(prompt.includes('2026-10-16 (Friday)'), 'Use the hotel-local date, not the UTC date');
-  assert(prompt.includes('\"date\":\"2026-10-16\"') && prompt.includes('\"available\":4'), 'Default prompt must contain dated fixture inventory');
-  const toolPrompt = getScenarioPrompt(config.id, new Date('2026-10-15T17:00:00Z'), true);
+  const prompt = getScenarioPrompt(config.id, new Date('2026-10-16T02:00:00Z'));
+  assert(prompt.includes('2026-10-15 (Thursday)'), 'Use the hotel-local date, not the UTC date');
+  assert(prompt.includes('\"date\":\"2026-10-15\"') && prompt.includes('\"available\":4'), 'Default prompt must contain dated fixture inventory');
+  const toolPrompt = getScenarioPrompt(config.id, new Date('2026-10-16T02:00:00Z'), true);
   assert(!toolPrompt.includes('Local room inventory:') && toolPrompt.includes('Never substitute inline inventory'), 'Tool mode must not mask a failed lookup with local counts');
   assert(prompt.includes('standard-twin'), 'Expose room IDs and local inventory in default mode');
 
   for (const [clock, checkIn, checkOut] of [
-    ['2026-12-15T04:00:00Z', '2026-12-15', '2026-12-17'],
-    ['2026-11-30T04:00:00Z', '2026-11-30', '2026-12-02'],
-    ['2026-12-31T04:00:00Z', '2026-12-31', '2027-01-02'],
+    ['2026-12-15T05:00:00Z', '2026-12-15', '2026-12-17'],
+    ['2026-11-30T05:00:00Z', '2026-11-30', '2026-12-02'],
+    ['2026-12-31T05:00:00Z', '2026-12-31', '2027-01-02'],
   ]) {
     const now = new Date(clock);
     const stay = await lookupStayAvailability('standard-king', checkIn, checkOut, now);
@@ -83,10 +83,12 @@ async function verifyRoomStatus() {
     assert.equal(stay.nights[1].available, 2);
     assert.deepEqual(stay.missingDates, []);
   }
-  const afterMidnight = new Date('2026-12-31T17:00:00Z');
+  const afterMidnight = new Date('2027-01-01T05:30:00Z');
   assert.equal(getHotelLocalDate(afterMidnight), '2027-01-01');
   assert.equal((await lookupRoomAvailability('standard-king', '2027-01-01', afterMidnight))?.available, 4);
   assert(getScenarioPrompt(config.id, afterMidnight).includes('2027-01-01 (Friday)'));
+  assert.equal(getHotelLocalDate(new Date('2026-07-01T04:30:00Z')), '2026-07-01', 'Summer uses EDT');
+  assert.equal(getHotelLocalDate(new Date('2026-12-01T04:30:00Z')), '2026-11-30', 'Winter uses EST');
   console.log('Hotel room-status checks passed: rolling inventory, December, month/year boundaries, single nights, stays, unknown data, validation, and tool URL');
 }
 
