@@ -1,103 +1,108 @@
 ---
-recipe_version: 0.1.0
-recipe_status: stable
+recipe_version: 0.2.0
+recipe_status: draft
 extension_points:
-  - api.routes
-  - prompts.system
-  - pipeline.providers
-  - ui.conversation
+  - id: prompts.system
+    name: Scenario role, workflow, guardrails and greeting
+  - id: scenario.data
+    name: Local business knowledge and fixtures
+  - id: api.routes
+    name: Scenario routes and optional server-bound tools
+  - id: pipeline.providers
+    name: Managed speech, model, voice and turn detection
+  - id: ui.conversation
+    name: Scenario presentation and real session evidence
 invariants:
-  - baseline.official-sample
-  - tokens.rtc-rtm
-  - lifecycle.strict-mode
-  - transcript.uid-remap
+  - id: tokens.rtc-rtm
+    summary: Keep combined RTC and RTM token privileges and server-only certificates
+  - id: lifecycle.strict-mode
+    summary: Preserve the initialization guard and hook-owned cleanup
+  - id: transcript.uid-remap
+    summary: Remap local user UID zero and retain interrupted turns
+  - id: scenario.outcome
+    summary: Report business success only from the corresponding successful result
 stable_contracts:
-  - env.required
-  - api.token
-  - api.invite-agent
-  - api.stop-conversation
+  - id: env.required
+    summary: Use NEXT_PUBLIC_AGORA_APP_ID and server-only NEXT_AGORA_APP_CERTIFICATE in .env.local
+  - id: api.token
+    summary: GET /api/generate-agora-token returns token, uid and channel
+  - id: api.invite-agent
+    summary: Preserve this scenario's startup fields and server-bound tool scope
+  - id: api.stop-conversation
+    summary: POST /api/stop-conversation accepts agent_id
+  - id: verification.canonical
+    summary: pnpm run verify covers local contracts and build; Docker and live speech are separate
 ---
 
 # Quickstart Recipe Profile
 
-This repo is a reusable quickstart sample for building browser voice-agent experiences with Agora Conversational AI Engine.
+For the eight-part user guide, read [Hotel Reception Assistant](../../RECIPE.md).
 
 ## Recipe Role
 
-- Role: `base` quickstart recipe.
-- Target audience: developers bootstrapping a production-style Next.js voice agent app.
-- Reuse model: clone, bind project, run, then customize prompt/pipeline/UI.
+- Role: `base` standalone scenario recipe, derived from the official Agora Next.js voice quickstart.
+- Audience: developers running or integrating Hotel Reception Assistant.
+- Reuse: inspect this source, configure the documented project, verify default conversation, then enable requested business tools.
 
 ## Recipe Scope
 
-This base recipe provides a copyable browser voice-agent starter with:
+A hotel reception voice assistant for a fictional Boston hotel. Guests can ask about policies and facilities, specify a room type and dates, and discuss sample availability across a stay. The recipe includes an editable seven-night rolling inventory and a read-only room-status API.
 
-- browser RTC audio and RTM event transport
-- server-side token, invite, stop, and optional custom LLM routes
-- managed default STT, LLM, and TTS provider configuration
-- pre-call, in-call, transcript, metrics, and connection-status UI
+Default conversation: Hotel FAQ, room types and dated sample counts enter the prompt at session start. They support discussion of fictional availability without calling a business tool.
+
+Optional tools: `lookup_room_status` queries one occupied night at a time. Inline counts are omitted; a failed tool result cannot be replaced with fixed prompt inventory.
+
+Limits: Availability does not create a booking. No reservation, payment, upgrade, cancellation, callback submission or human transfer is implemented. All inventory is fictional, not a live property-management feed.
 
 ## Baseline Implementation Guidance
 
-This repository is the official Agora Next.js quickstart baseline for this recipe. Agents should use this repo's source and progressive disclosure docs as the starting point, then customize.
-
-Do not recreate Agora ConvoAI integration from memory. Provider schemas, SDK builder fields, token behavior, and RTM event details can drift. For a new baseline implementation, follow [L1/L2/from_scratch_bootstrap.md](L1/L2/from_scratch_bootstrap.md) while copying verified patterns from this repo.
+The upstream baseline is [AgoraIO-Conversational-AI/agent-quickstart-nextjs](https://github.com/AgoraIO-Conversational-AI/agent-quickstart-nextjs). This repository is its scenario derivative, not a replacement identity for upstream. Use current source and the [code map](L1/03_code_map.md); do not recreate SDK schemas, tokens or lifecycle from memory. [Bootstrap guidance](L1/L2/from_scratch_bootstrap.md) documents the copy map.
 
 ## Extension Points
 
-- `api.routes`: add browser-facing routes under `app/api`, with shared request/response types in `types/conversation.ts` when the client consumes them.
-- `prompts.system`: edit `ADA_PROMPT` and `GREETING` in `app/api/invite-agent/route.ts`.
-- `pipeline.providers`: adjust the `DeepgramSTT`, `OpenAI`, and `MiniMaxTTS` builder chain, or enable the commented BYOK blocks.
-- `ui.conversation`: customize scenario presentation, ScenarioShell, QuickstartConversationLayout, QuickstartTranscriptPanel and the vendored Glass controls.
+| Surface | Source | Verification |
+| --- | --- | --- |
+| FAQ and room types | `scenarios/05-hotel-reception/hotel.json` | pnpm run verify:scenario; verify the relevant acceptance case |
+| Inventory validation | `scenarios/05-hotel-reception/hotel.ts` | pnpm run verify:scenario; verify the relevant acceptance case |
+| Reception behavior | `scenarios/05-hotel-reception/config.ts` | pnpm run verify:scenario; verify the relevant acceptance case |
+
+- `scenarios/index.ts`: default/tool prompt assembly.
+- `scenarios/tool-contracts.ts`: available REST tools and parameter/call scope.
+- `app/api/invite-agent/route.ts`: providers, turn detection and managed Agent lifecycle.
+- `scenarios/presentation.ts` and scenario presentation: visible identity, start action and developer paths.
+- `components/ScenarioInspector.tsx`, `lib/inspection.ts`: reported session evidence. Preserve missing values and manual outcome provenance.
 
 ## Invariants
 
-- Keep `RtcTokenBuilder.buildTokenWithRtm` for RTM-capable tokens.
-- Treat this repo as the official baseline; customize after preserving a working token, invite, RTC, RTM, and transcript flow.
-- Preserve StrictMode `isReady` guard for join/mic initialization.
-- Preserve UID remap (`uid="0"`) and `INTERRUPTED` message-list inclusion.
-- Keep documentation synchronized when workflows/contracts change.
+- Keep `RtcTokenBuilder.buildTokenWithRtm` and the common Agent UID in `lib/agora.ts`.
+- Preserve the StrictMode `isReady` guard and toolkit initialization after RTC join.
+- Let `useJoin`, `useLocalMicrophoneTrack` and `usePublish` own leave, track cleanup and publication.
+- Remap toolkit `uid="0"` to the local user; retain interrupted transcript turns.
+- Keep certificates/provider keys on the server and business tools scoped to the appropriate call.
+- Never infer a saved result from transcript text or replace failed tools with fixture success.
+- Availability does not create a booking. No reservation, payment, upgrade, cancellation, callback submission or human transfer is implemented. All inventory is fictional, not a live property-management feed.
 
 ## Stable Contracts
 
 - `GET /api/generate-agora-token` returns `{ token, uid, channel }`.
-- `POST /api/invite-agent` accepts `{ requester_id, channel_name }` and returns the agent id/state payload.
-- `POST /api/stop-conversation` accepts `{ agent_id }` and treats already-stopping sessions as success.
-- Required env vars are `NEXT_PUBLIC_AGORA_APP_ID` and `NEXT_AGORA_APP_CERTIFICATE`.
-- `components/LandingPage.tsx` owns pre-call bootstrap and RTM client lifecycle.
-- `components/ConversationComponent.tsx` owns joined-session RTC/toolkit lifecycle.
-- `lib/conversation.ts` owns transcript normalization helpers.
+- `POST /api/invite-agent` starts the scenario Agent. The invite body contains `requester_id` and `channel_name`.
+- `POST /api/stop-conversation` accepts `{ agent_id }`; already-stopping states are idempotent.
+- `lookup_room_status` calls `GET /api/scenarios/05-hotel-reception/room-status` with `room_type` and `date`. Direct API clients can instead use `check_in` and `check_out` for a 1–31-night stay. The response identifies `local_fixture` data and keeps `booking_confirmed: false`.
+- Local environment: `env.local.example` → `.env.local`; required keys are the public App ID and server-only App Certificate. [All variables](L1/01_setup.md) include optional business-tool/storage paths.
+- Node.js 22+, pnpm 9.15.9; canonical checks are `pnpm run verify`. `pnpm run verify:docker` is a separate image/startup/scenario-route check.
+- The voice app and read-only inventory route can share a Next.js deployment. The route reads packaged hotel.json on each request. Editing inventory on a writable local server is visible to API calls without restart; changing a hosted bundle requires redeployment. Start a fresh conversation after prompt-data changes.
 
-## Internal / Subject to Change
+## Internal / Subject To Change
 
-The hotel extension adds a local read-only room-status API backed by the
-repository's editable `hotel.json`. It supports single-night and 1–31-night stay
-queries. Inventory uses offsets from hotel-local today by default; explicit dates
-remain available for fixed-date tests. Checkout is excluded; incomplete data stays unknown. Optional
-`TOP_TEN_SCENARIO_TOOL_BASE_URL` publishes the same route to the cloud Agent as a
-REST tool; local HTTP testing does not depend on it. The hotel extension has no
-booking writes or actual human transfer. See the [hotel guide](../../scenarios/05-hotel-reception/README.md).
-
-
-- Visual styling and copy in the quickstart UI.
-- The exact reseller defaults for STT, LLM, and TTS models.
-- Connection issue display heuristics and metric chip presentation.
+Component layout, presentation copy, model/provider defaults, UI diagnostics and internal storage implementation are not stable external APIs. Inspect source rather than importing undocumented internals.
 
 ## Consumer Onboarding Recipe
 
-1. Clone or scaffold from template.
-2. Bind Agora project and write `.env.local`.
-3. Run `pnpm run doctor` and `pnpm run dev`.
-4. Validate with `pnpm run verify` before sharing modifications.
-5. Customize agent behavior and UI using the supported surfaces above.
-
-
-## Local conversation and optional tools
-
-Default conversations append hotel.json FAQ, room types and dated fictional room counts to the prompt. dayOffset is resolved against the hotel-local date at session start. For a stay, include check-in, exclude check-out and take the minimum nightly count; missing dates are unknown. No booking or callback is submitted. With a public HTTPS tool origin, omit inline counts and require successful room-status results; tool failure cannot fall back to fixed counts.
-
-TOP_TEN_SCENARIO_TOOL_BASE_URL is optional. Only an explicitly configured public HTTPS endpoint enables tools; malformed, HTTP, localhost and local/private origins leave tools disabled. URL validation does not prove network reachability. No tunnel, knowledge base or database is needed for the default conversation. Local checks do not establish live speech or cloud callback acceptance.
-
-## Scenario 01 UI alignment (2026-10-21)
-
-`ScenarioShell` and `useScenarioUi` compose the entry, persistent identity, activity workspace, Inspector and Build panels around existing session bootstrap. `scenarios/presentation.ts` loads scenario-specific content. `ConversationComponent` reports actual activity/inspection events and uses the adopted transcript and Glass controls. Business views remain scenario-owned below the voice workspace. Tailwind 4/PostCSS, theme recipes and MiSans match scenario 01. `scenarios/runtime-profile.ts` displays the non-secret configured pipeline; keep it aligned with the invite route. Never treat browser fixtures as live RTC/tool acceptance.
+1. Clone `https://github.com/littleDogWang/05-hotel-reception.git` and change into `05-hotel-reception`.
+2. With Node.js 22+ and pnpm 9.15.9, run `pnpm install --frozen-lockfile`.
+3. Copy `env.local.example` to `.env.local` only on a clean clone; fill the two Agora project credentials. Alternatively use the ready CLI's template-aware `agora quickstart env write . --template nextjs --project <your-project> --json`.
+4. Run `pnpm run doctor`, then `pnpm run dev`. Open http://localhost:3000 and choose the scenario start action.
+5. Verify two-way speech/transcript with a real call. Hotel FAQ, room types and dated sample counts enter the prompt at session start. They support discussion of fictional availability without calling a business tool.
+6. If requested, configure this same app's public HTTPS business-tool origin and start a fresh conversation; verify actual callbacks and result state.
+7. Run `pnpm run verify`. For containers, follow [README Docker](../../README.md#docker) and run `pnpm run verify:docker`.
+8. Customize only supported surfaces, synchronize this contract and the public guide, and repeat relevant checks. Repository edits do not register or publish a recipe automatically.
