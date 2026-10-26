@@ -1,5 +1,5 @@
 import type { LlmTool } from 'agora-agents';
-import { HOTEL_ROOM_TYPES } from './05-hotel-reception/hotel';
+import { HOTEL_ROOM_TYPES } from './hotel-reception/hotel';
 type Property = Record<string, unknown>;
 function tool(baseUrl: string, name: string, description: string, method: 'GET' | 'POST', path: string, properties: Property, required: string[], body?: Record<string, unknown>): LlmTool {
   return { type: 'function', function: { name, description, parameters: { type: 'object', properties, required } }, server: { method, url: `${baseUrl.replace(/\/$/, '')}${path}`, ...(body ? { body } : {}) } };

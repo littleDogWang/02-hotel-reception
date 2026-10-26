@@ -1,4 +1,5 @@
-import type { ScenarioPresentation } from '../presentation';
+import type { ScenarioPresentation } from '@/types/presentation';
+export type { ScenarioPresentation } from '@/types/presentation';
 
 export const presentation: ScenarioPresentation = {
   "id": "05-hotel-reception",
@@ -53,11 +54,11 @@ export const presentation: ScenarioPresentation = {
     "extensionPoints": [
       {
         "title": "Change assistant instructions",
-        "path": "scenarios/05-hotel-reception/config.ts"
+        "path": "lib/agent-config.ts"
       },
       {
         "title": "Adapt hotel.json",
-        "path": "scenarios/05-hotel-reception/hotel.json"
+        "path": "lib/hotel-reception/hotel.json"
       },
       {
         "title": "Choose models and voice",
@@ -65,8 +66,12 @@ export const presentation: ScenarioPresentation = {
       },
       {
         "title": "Adapt scenario UI content",
-        "path": "scenarios/05-hotel-reception/presentation.ts"
+        "path": "lib/presentation.ts"
       }
     ]
   }
 };
+
+export function getScenarioPresentation(): ScenarioPresentation {
+  return presentation;
+}

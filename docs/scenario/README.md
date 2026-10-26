@@ -123,3 +123,13 @@ TOP_TEN_SCENARIO_TOOL_BASE_URL is optional. Only an explicitly configured public
 ## U.S. example data
 
 The fictional hotel is in Boston, Massachusetts. Its rolling inventory, relative dates and policy times use `America/New_York` (U.S. Eastern Time), including daylight saving time.
+
+## Source locations
+
+This guide lives in documentation; executable code uses the standalone Next.js
+Quickstart layout. Agent instructions and prompt assembly are in
+[lib/agent-config.ts](../../lib/agent-config.ts), optional tool contracts are in
+[lib/agent-tools.ts](../../lib/agent-tools.ts), and presentation content is in
+[lib/presentation.ts](../../lib/presentation.ts). Business modules and fixtures
+live in [lib/hotel-reception/](../../lib/hotel-reception/). File basenames in this guide
+refer to these source locations, not to files next to this document.

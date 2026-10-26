@@ -24,7 +24,7 @@ RUN addgroup --system --gid 1001 nodejs && adduser --system --uid 1001 nextjs
 COPY --from=build --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=build --chown=nextjs:nodejs /app/.next/static ./.next/static
 COPY --from=build --chown=nextjs:nodejs /app/public ./public
-COPY --from=build --chown=nextjs:nodejs /app/scenarios/05-hotel-reception/hotel.json ./scenarios/05-hotel-reception/hotel.json
+COPY --from=build --chown=nextjs:nodejs /app/lib/hotel-reception/hotel.json ./lib/hotel-reception/hotel.json
 RUN mkdir -p /app/.scenario-data && chown nextjs:nodejs /app/.scenario-data
 USER nextjs
 EXPOSE 3000

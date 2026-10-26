@@ -22,7 +22,7 @@ export function getHotelLocalDate(now = new Date(), timeZone = HOTEL_TIME_ZONE):
 }
 
 async function readRoomInventory(now: Date): Promise<RoomAvailability[]> {
-  const contents = await readFile(path.join(process.cwd(), 'scenarios/05-hotel-reception/hotel.json'), 'utf8');
+  const contents = await readFile(path.join(process.cwd(), 'lib/hotel-reception/hotel.json'), 'utf8');
   const { rooms, timeZone } = JSON.parse(contents) as { rooms: InventoryRecord[]; timeZone: string };
   if (!Array.isArray(rooms) || rooms.some((room) =>
     !room || typeof room.roomType !== 'string' || !room.roomType.trim() ||

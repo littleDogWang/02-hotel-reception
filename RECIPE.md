@@ -30,7 +30,7 @@ Run [Quick Start](#5-quick-start), open [http://localhost:3000](http://localhost
 | Change room type | What about a family suite for those same nights? | The shipped fixture has zero suites tomorrow, so that stay is unavailable. |
 | Go outside the window | Can you check a room for two weeks from now? | Missing dates remain unknown; the assistant does not invent availability or call it sold out. |
 
-Rows that describe tool actions require the optional public HTTPS tool configuration. In default mode, expect the limitations described above. These are acceptance cases to try, not a claim that a live voice run has passed. For the full scenario matrix, see [acceptance.md](scenarios/05-hotel-reception/acceptance.md).
+Rows that describe tool actions require the optional public HTTPS tool configuration. In default mode, expect the limitations described above. These are acceptance cases to try, not a claim that a live voice run has passed. For the full scenario matrix, see [acceptance.md](docs/scenario/acceptance.md).
 
 ## 3. Architecture & Tech Stack
 
@@ -61,7 +61,7 @@ flowchart LR
 | Next.js route handlers | Keep the App Certificate server-side, issue combined RTC/RTM tokens and manage Agent sessions. |
 | Scenario modules | Supply instructions, demo data and the optional business API/tool contracts. |
 
-The client uses `agora-rtc-react`, `agora-rtc-sdk-ng`, `agora-rtm` and `agora-agent-client-toolkit`; the server uses `agora-agents`. The configured pipeline is Deepgram nova-3 → OpenAI gpt-4o-mini → MiniMax speech_2_6_turbo with English speech. See [the invite route](app/api/invite-agent/route.ts) and [runtime profile](scenarios/runtime-profile.ts) when changing providers. No separate vendor API key is required for the default Agora-managed configuration.
+The client uses `agora-rtc-react`, `agora-rtc-sdk-ng`, `agora-rtm` and `agora-agent-client-toolkit`; the server uses `agora-agents`. The configured pipeline is Deepgram nova-3 → OpenAI gpt-4o-mini → MiniMax speech_2_6_turbo with English speech. See [the invite route](app/api/invite-agent/route.ts) and [runtime profile](lib/runtime-profile.ts) when changing providers. No separate vendor API key is required for the default Agora-managed configuration.
 
 ## 4. Prerequisites & Configuration
 
@@ -114,24 +114,24 @@ Open [http://localhost:3000](http://localhost:3000), choose **Talk to hotel rece
 
 `lookup_room_status` calls `GET /api/scenarios/05-hotel-reception/room-status` with `room_type` and `date`. Direct API clients can instead use `check_in` and `check_out` for a 1–31-night stay. The response identifies `local_fixture` data and keeps `booking_confirmed: false`.
 
-The invite body contains `requester_id` and `channel_name`. The supplied browser already handles this startup sequence. See [the scenario guide](scenarios/05-hotel-reception/README.md) for additional behavior and contracts.
+The invite body contains `requester_id` and `channel_name`. The supplied browser already handles this startup sequence. See [the scenario guide](docs/scenario/README.md) for additional behavior and contracts.
 
 ## 7. Customize for Your Business
 
 | Change | Source | How |
 | --- | --- | --- |
-| FAQ and room types | [hotel.json](scenarios/05-hotel-reception/hotel.json) | Replace hotel policies, room IDs and the configured America/New_York setting as appropriate for your U.S. hotel. |
-| Inventory validation | [hotel.ts](scenarios/05-hotel-reception/hotel.ts) | Preserve one valid room/date pair, non-negative counts and unknown-date semantics. |
-| Reception behavior | [config.ts](scenarios/05-hotel-reception/config.ts) | Change the greeting and workflow; scenarios/index.ts selects inline inventory or tool-only mode. |
+| FAQ and room types | [hotel.json](lib/hotel-reception/hotel.json) | Replace hotel policies, room IDs and the configured America/New_York setting as appropriate for your U.S. hotel. |
+| Inventory validation | [hotel.ts](lib/hotel-reception/hotel.ts) | Preserve one valid room/date pair, non-negative counts and unknown-date semantics. |
+| Reception behavior | [config.ts](lib/agent-config.ts) | Change the greeting and workflow; lib/agent-config.ts selects inline inventory or tool-only mode. |
 
 For a live inventory integration, replace the room-status route's local lookup with a read from your property-management system. Preserve the room/date response contract and unknown/error handling. Add reservation creation as a separate confirmed write; do not turn an availability answer into a booking.
 
 Shared integration points:
 
-- [scenarios/index.ts](scenarios/index.ts) assembles the selected scenario prompt.
-- [scenarios/tool-contracts.ts](scenarios/tool-contracts.ts) defines business tool schemas and server-bound routes.
+- [lib/agent-config.ts](lib/agent-config.ts) assembles the selected scenario prompt.
+- [lib/agent-tools.ts](lib/agent-tools.ts) defines business tool schemas and server-bound routes.
 - [app/api/invite-agent/route.ts](app/api/invite-agent/route.ts) selects the prompt, providers, turn detection and session settings.
-- [scenarios/presentation.ts](scenarios/presentation.ts) selects the scenario presentation; edit its scenario module for visible content.
+- [lib/presentation.ts](lib/presentation.ts) selects the scenario presentation; edit its scenario module for visible content.
 - [docs/ai/RECIPE.md](docs/ai/RECIPE.md) retains the machine-readable integration profile and lifecycle contracts.
 
 Keep combined RTC/RTM token generation, the StrictMode initialization guard, toolkit local-user UID remapping and interrupted transcript turns intact. Let the Agora React hooks own microphone and RTC teardown. Preserve server-bound business session scope when extending tools.
@@ -211,4 +211,4 @@ With the local prerequisites and credentials configured, also run `pnpm run veri
 | The assistant discusses the task but does not save or change it | Check whether the optional public tool origin is enabled. The default conversation has the limits in section 1. |
 | A tool fails or a result disappears | Inspect the actual API error, callback reachability and this scenario's storage/lifetime limits; do not claim success from speech alone. |
 
-See [the contributor guide](AGENTS.md), [scenario guide](scenarios/05-hotel-reception/README.md) and [MIT License](LICENSE) for further details.
+See [the contributor guide](AGENTS.md), [scenario guide](docs/scenario/README.md) and [MIT License](LICENSE) for further details.

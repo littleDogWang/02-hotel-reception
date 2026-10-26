@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { isHotelDate, lookupRoomAvailability, lookupStayAvailability } from '@/scenarios/05-hotel-reception/hotel';
+import { isHotelDate, lookupRoomAvailability, lookupStayAvailability } from '@/lib/hotel-reception/hotel';
 
 export async function GET(request: Request) {
   try {

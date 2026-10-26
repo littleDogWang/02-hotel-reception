@@ -1,8 +1,8 @@
-import { getScenarioConfig, getScenarioPrompt } from '../scenarios';
+import { getScenarioConfig, getScenarioPrompt } from '../lib/agent-config';
 import assert from 'node:assert/strict';
 import { GET } from '../app/api/scenarios/05-hotel-reception/room-status/route';
-import { getScenarioTools } from '../scenarios/tool-contracts';
-import { getHotelLocalDate, lookupRoomAvailability, lookupStayAvailability } from '../scenarios/05-hotel-reception/hotel';
+import { getScenarioTools } from '../lib/agent-tools';
+import { getHotelLocalDate, lookupRoomAvailability, lookupStayAvailability } from '../lib/hotel-reception/hotel';
 const config = getScenarioConfig();
 if (config.id !== '05-hotel-reception') throw new Error(`Expected 05-hotel-reception, got ${config.id}`);
 for (const field of ['role', 'workflow', 'guardrails']) { if (!config[field as keyof typeof config]) throw new Error(`Missing ${field}`); }
