@@ -16,8 +16,8 @@ Read the [eight-part recipe](RECIPE.md) for example conversations and business c
 ## Run It
 
 ```bash
-git clone https://github.com/littleDogWang/05-hotel-reception.git
-cd 05-hotel-reception
+git clone https://github.com/littleDogWang/02-hotel-reception.git
+cd 02-hotel-reception
 pnpm install --frozen-lockfile
 cp env.local.example .env.local
 ```
@@ -106,7 +106,7 @@ See [ARCHITECTURE.md](ARCHITECTURE.md) for topology, ownership and deployment de
 | Confirm the stay | Use dated prompt counts by default; in tool mode query every occupied night. | The minimum nightly count, with missing dates treated as unknown. |
 | Ask to reserve or speak to staff | Explain the available next step without a booking or handoff claim. | A verbal summary of sample availability only. |
 
-`lookup_room_status` calls `GET /api/scenarios/05-hotel-reception/room-status` with `room_type` and `date`. Direct API clients can instead use `check_in` and `check_out` for a 1–31-night stay. The response identifies `local_fixture` data and keeps `booking_confirmed: false`.
+`lookup_room_status` calls `GET /api/scenarios/02-hotel-reception/room-status` with `room_type` and `date`. Direct API clients can instead use `check_in` and `check_out` for a 1–31-night stay. The response identifies `local_fixture` data and keeps `booking_confirmed: false`.
 
 The invite body contains `requester_id` and `channel_name`.
 
@@ -137,8 +137,8 @@ Native hosting runs `pnpm run build` and `pnpm run start` on the documented Node
 ### Docker
 
 ```bash
-docker build --build-arg NEXT_PUBLIC_AGORA_APP_ID=YOUR_AGORA_APP_ID -t 05-hotel-reception:local .
-docker run --rm -p 3000:3000 --env-file .env.local 05-hotel-reception:local
+docker build --build-arg NEXT_PUBLIC_AGORA_APP_ID=YOUR_AGORA_APP_ID -t 02-hotel-reception:local .
+docker run --rm -p 3000:3000 --env-file .env.local 02-hotel-reception:local
 ```
 
 Replace `YOUR_AGORA_APP_ID` with the public App ID used in `.env.local`. Next.js embeds that identifier in the browser bundle, so changing projects requires rebuilding the image. The App Certificate is supplied only at container runtime. A container restart does not preserve process memory. This image does not add a shared state service.

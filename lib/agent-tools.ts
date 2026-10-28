@@ -24,6 +24,6 @@ export function getScenarioTools(_scenarioId: string, baseUrl = process.env.TOP_
   if (!origin) return [];
   const stringProperty = { type: 'string' };
   return [
-        tool(origin, 'lookup_room_status', `Read fictional room availability for one night. room_type is one of: ${HOTEL_ROOM_TYPES.map((room) => room.id).join(', ')}; date is YYYY-MM-DD. For a stay, query each night from check-in inclusive to check-out exclusive. This never creates a booking.`, 'GET', '/api/scenarios/05-hotel-reception/room-status?room_type={{args.room_type}}&date={{args.date}}', { room_type: stringProperty, date: stringProperty }, ['room_type', 'date']),
+        tool(origin, 'lookup_room_status', `Read fictional room availability for one night. room_type is one of: ${HOTEL_ROOM_TYPES.map((room) => room.id).join(', ')}; date is YYYY-MM-DD. For a stay, query each night from check-in inclusive to check-out exclusive. This never creates a booking.`, 'GET', '/api/scenarios/02-hotel-reception/room-status?room_type={{args.room_type}}&date={{args.date}}', { room_type: stringProperty, date: stringProperty }, ['room_type', 'date']),
       ];
 }

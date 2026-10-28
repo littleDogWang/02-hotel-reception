@@ -19,8 +19,8 @@ The tracked schema is `env.local.example`; the local file is `.env.local`. Keep 
 ## Setup
 
 ```bash
-git clone https://github.com/littleDogWang/05-hotel-reception.git
-cd 05-hotel-reception
+git clone https://github.com/littleDogWang/02-hotel-reception.git
+cd 02-hotel-reception
 pnpm install --frozen-lockfile
 cp env.local.example .env.local
 ```

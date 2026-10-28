@@ -1,17 +1,17 @@
 import { getScenarioConfig, getScenarioPrompt } from '../lib/agent-config';
 import assert from 'node:assert/strict';
-import { GET } from '../app/api/scenarios/05-hotel-reception/room-status/route';
+import { GET } from '../app/api/scenarios/02-hotel-reception/room-status/route';
 import { getScenarioTools } from '../lib/agent-tools';
 import { getHotelLocalDate, lookupRoomAvailability, lookupStayAvailability } from '../lib/hotel-reception/hotel';
 const config = getScenarioConfig();
-if (config.id !== '05-hotel-reception') throw new Error(`Expected 05-hotel-reception, got ${config.id}`);
+if (config.id !== '02-hotel-reception') throw new Error(`Expected 02-hotel-reception, got ${config.id}`);
 for (const field of ['role', 'workflow', 'guardrails']) { if (!config[field as keyof typeof config]) throw new Error(`Missing ${field}`); }
 if (!getScenarioPrompt().includes('# Goal and conversation flow')) throw new Error('Scenario prompt was not formatted');
 console.log(`Scenario config passed: ${config.id}`);
 
 async function verifyRoomStatus() {
   const baseUrl = 'http://localhost:3000';
-  const path = '/api/scenarios/05-hotel-reception/room-status';
+  const path = '/api/scenarios/02-hotel-reception/room-status';
   const today = getHotelLocalDate();
   const day = (offset: number) => {
     const date = new Date(`${today}T00:00:00Z`);

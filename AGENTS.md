@@ -1,6 +1,6 @@
 # Agent Development Guide
 
-This guide is for coding agents making changes in `05-hotel-reception`.
+This guide is for coding agents making changes in `02-hotel-reception`.
 
 
 ## U.S. scenario content

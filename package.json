@@ -1,5 +1,5 @@
 {
-  "name": "05-hotel-reception",
+  "name": "02-hotel-reception",
   "version": "0.1.0",
   "description": "Answer hotel questions and explain room availability for a requested stay.",
   "private": true,

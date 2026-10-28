@@ -91,7 +91,7 @@ The upstream baseline is [AgoraIO-Conversational-AI/agent-quickstart-nextjs](htt
 - `GET /api/generate-agora-token` returns `{ token, uid, channel }`.
 - `POST /api/invite-agent` starts the scenario Agent. The invite body contains `requester_id` and `channel_name`.
 - `POST /api/stop-conversation` accepts `{ agent_id }`; already-stopping states are idempotent.
-- `lookup_room_status` calls `GET /api/scenarios/05-hotel-reception/room-status` with `room_type` and `date`. Direct API clients can instead use `check_in` and `check_out` for a 1–31-night stay. The response identifies `local_fixture` data and keeps `booking_confirmed: false`.
+- `lookup_room_status` calls `GET /api/scenarios/02-hotel-reception/room-status` with `room_type` and `date`. Direct API clients can instead use `check_in` and `check_out` for a 1–31-night stay. The response identifies `local_fixture` data and keeps `booking_confirmed: false`.
 - Local environment: `env.local.example` → `.env.local`; required keys are the public App ID and server-only App Certificate. [All variables](L1/01_setup.md) include optional business-tool/storage paths.
 - Node.js 22+, pnpm 9.15.9; canonical checks are `pnpm run verify`. `pnpm run verify:docker` is a separate image/startup/scenario-route check.
 - The voice app and read-only inventory route can share a Next.js deployment. The route reads packaged hotel.json on each request. Editing inventory on a writable local server is visible to API calls without restart; changing a hosted bundle requires redeployment. Start a fresh conversation after prompt-data changes.
@@ -102,7 +102,7 @@ Component layout, presentation copy, model/provider defaults, UI diagnostics and
 
 ## Consumer Onboarding Recipe
 
-1. Clone `https://github.com/littleDogWang/05-hotel-reception.git` and change into `05-hotel-reception`.
+1. Clone `https://github.com/littleDogWang/02-hotel-reception.git` and change into `02-hotel-reception`.
 2. With Node.js 22+ and pnpm 9.15.9, run `pnpm install --frozen-lockfile`.
 3. Copy `env.local.example` to `.env.local` only on a clean clone; fill the two Agora project credentials. Alternatively use the ready CLI's template-aware `agora quickstart env write . --template nextjs --project <your-project> --json`.
 4. Run `pnpm run doctor`, then `pnpm run dev`. Open http://localhost:3000 and choose the scenario start action.

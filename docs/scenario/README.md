@@ -53,7 +53,7 @@ for (const query of [
   { room_type: 'standard-king', date: today },
   { room_type: 'standard-king', check_in: today, check_out: checkout.toISOString().slice(0, 10) },
 ]) {
-  const response = await fetch(`${origin}/api/scenarios/05-hotel-reception/room-status?${new URLSearchParams(query)}`);
+  const response = await fetch(`${origin}/api/scenarios/02-hotel-reception/room-status?${new URLSearchParams(query)}`);
   console.log(response.status, await response.json());
 }
 JS

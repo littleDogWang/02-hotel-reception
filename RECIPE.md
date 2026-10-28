@@ -2,7 +2,7 @@
 
 Answer hotel questions and explain room availability for a requested stay.
 
-[Try locally](#2-try-the-demo) · [Source on GitHub](https://github.com/littleDogWang/05-hotel-reception) · [Build with AI](#build-with-ai)
+[Try locally](#2-try-the-demo) · [Source on GitHub](https://github.com/littleDogWang/02-hotel-reception) · [Build with AI](#build-with-ai)
 
 TypeScript · Web · Next.js 16 / React 19 · Agora Conversational AI
 
@@ -85,8 +85,8 @@ Leave `TOP_TEN_SCENARIO_TOOL_BASE_URL` unset for the default conversation. To en
 From a terminal, clone this scenario rather than the generic starter:
 
 ```bash
-git clone https://github.com/littleDogWang/05-hotel-reception.git
-cd 05-hotel-reception
+git clone https://github.com/littleDogWang/02-hotel-reception.git
+cd 02-hotel-reception
 pnpm install --frozen-lockfile
 cp env.local.example .env.local
 ```
@@ -112,7 +112,7 @@ Open [http://localhost:3000](http://localhost:3000), choose **Talk to hotel rece
 
 ### Tools and result semantics
 
-`lookup_room_status` calls `GET /api/scenarios/05-hotel-reception/room-status` with `room_type` and `date`. Direct API clients can instead use `check_in` and `check_out` for a 1–31-night stay. The response identifies `local_fixture` data and keeps `booking_confirmed: false`.
+`lookup_room_status` calls `GET /api/scenarios/02-hotel-reception/room-status` with `room_type` and `date`. Direct API clients can instead use `check_in` and `check_out` for a 1–31-night stay. The response identifies `local_fixture` data and keeps `booking_confirmed: false`.
 
 The invite body contains `requester_id` and `channel_name`. The supplied browser already handles this startup sequence. See [the scenario guide](docs/scenario/README.md) for additional behavior and contracts.
 
@@ -143,7 +143,7 @@ After cloning this repository, paste the following into your coding agent from y
 ```text
 Implement the Hotel Reception Assistant recipe in my application.
 
-Read RECIPE.md in the cloned 05-hotel-reception repository first, then inspect
+Read RECIPE.md in the cloned 02-hotel-reception repository first, then inspect
 its scenario modules, tool contracts and invite route. Read docs/ai/RECIPE.md
 and AGENTS.md in that repository for integration constraints.
 
@@ -171,8 +171,8 @@ These commands describe the repository's supported scripts; they do not attest t
 ### Docker deployment
 
 ```bash
-docker build --build-arg NEXT_PUBLIC_AGORA_APP_ID=YOUR_AGORA_APP_ID -t 05-hotel-reception:local .
-docker run --rm -p 3000:3000 --env-file .env.local 05-hotel-reception:local
+docker build --build-arg NEXT_PUBLIC_AGORA_APP_ID=YOUR_AGORA_APP_ID -t 02-hotel-reception:local .
+docker run --rm -p 3000:3000 --env-file .env.local 02-hotel-reception:local
 ```
 
 Replace `YOUR_AGORA_APP_ID` with the public App ID used in `.env.local`. Next.js embeds that identifier in the browser bundle, so changing projects requires rebuilding the image. The App Certificate is supplied only at container runtime. A container restart does not preserve process memory. This image does not add a shared state service.

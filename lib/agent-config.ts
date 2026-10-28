@@ -4,7 +4,7 @@ import type { ScenarioConfig } from '../types/agent-config';
 import { formatHotelFaqForPrompt, HOTEL_FIXTURE_VERSION, HOTEL_ROOM_TYPES } from './hotel-reception/hotel';
 
 export const config: ScenarioConfig = {
-  id: '05-hotel-reception',
+  id: '02-hotel-reception',
   title: 'Hotel reception',
   role: 'a friendly hotel reception agent.',
   workflow: 'Answer verified hotel policy and facility questions briefly. For room availability, collect exact check-in/check-out dates and the room type. Clarify king versus twin when the user only says standard room. Use lookup_room_status for every occupied night: include check-in and exclude check-out. The stay availability is the minimum nightly count, never the sum. A missing record is unknown, not sold out. If the tool is unavailable or fails, say you cannot check availability and suggest contacting the front desk directly.',
