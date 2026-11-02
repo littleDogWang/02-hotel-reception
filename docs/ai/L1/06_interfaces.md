@@ -1,46 +1,17 @@
 # 06 Interfaces
 
-> Actual scenario API, event and configuration boundaries.
+- GET /api/generate-agora-token accepts optional uid/channel and returns token, uid and channel.
+- POST /api/invite-agent requires requester_id and channel_name. It never requires a business session or registers business tools.
+- POST /api/stop-conversation accepts agent_id; preserve existing idempotency.
+- POST /api/chat/completions is an optional custom-LLM proxy.
+- Existing business data API routes return HTTP 410 without performing any operation.
 
-## Browser Or User-Facing APIs
+RTC carries audio. RTM/toolkit provides transcript, state, metrics and error events. Inspector keeps current-call evidence in the page; it does not save business results.
 
-- `GET /api/generate-agora-token`: optional uid/channel; returns `{ token, uid, channel }`; server credential/configuration errors return failure.
-- `POST /api/invite-agent`: requester/channel are required. The invite body contains `requester_id` and `channel_name`. Returns Agent ID, creation time and state; input and runtime failures are reported explicitly.
-- `POST /api/stop-conversation`: requires agent_id; already-stopping/not-found handling is idempotent.
-- `POST /api/chat/completions`: optional custom-LLM proxy, not used by the default managed pipeline.
-
-`lookup_room_status` calls `GET /api/scenarios/02-hotel-reception/room-status` with `room_type` and `date`. Direct API clients can instead use `check_in` and `check_out` for a 1–31-night stay. The response identifies `local_fixture` data and keeps `booking_confirmed: false`.
-
-Hotel FAQ, room types and dated sample counts enter the prompt at session start. They support discussion of fictional availability without calling a business tool.
-
-`lookup_room_status` queries one occupied night at a time. Inline counts are omitted; a failed tool result cannot be replaced with fixed prompt inventory.
-
-Use the scenario-specific entry and persistent identity; starting voice requires a user action.
-
-
-
-See [scenario guide](../../scenario/README.md) and the scenario source for exact business request shapes, validation errors and ownership rules.
-
-## Events And Media
-
-RTC carries microphone and synthesized audio. RTM/toolkit provides TRANSCRIPT_UPDATED, AGENT_STATE_CHANGED, AGENT_METRICS, completed-turn, error and SAL events where reported. Normalize toolkit local uid zero before display and retain interrupted turns. Preserve missing metric fields and data provenance; Inspector outcomes are manually confirmed.
-
-## Environment Contract
-
-Local Next.js reads `.env.local` from tracked `env.local.example`. Hosted/Docker servers inject runtime values; the public App ID must also be supplied to the browser build.
-
-| Variable | Required | Owner / exposure | Purpose |
-| --- | --- | --- | --- |
-| `NEXT_PUBLIC_AGORA_APP_ID` | Required | Next.js build and runtime; public | App ID from the selected Agora project; Docker must receive the same value at build and runtime. |
-| `NEXT_AGORA_APP_CERTIFICATE` | Required | Next.js server runtime; secret | Signs RTC/RTM credentials and authenticates managed Agent operations; never a build argument. |
-| `TOP_TEN_SCENARIO_TOOL_BASE_URL` | Optional | Next.js server; non-secret | This same app's public HTTPS origin. Omit for default conversation; enabling tools requires actual cloud reachability. |
-
-## External Services
-
-The server uses agora-agents with the configured managed STT/LLM/TTS providers. The browser uses RTC, Signaling and the Agent Client Toolkit. Optional business tools call this same app over public HTTPS, and their returned success is required before reporting an action complete. Provider BYOK blocks are opt-in, server-only and require separate verification.
+Local environment uses env.local.example and .env.local. Only NEXT_PUBLIC_AGORA_APP_ID and server-only NEXT_AGORA_APP_CERTIFICATE are required. Old business-tool/storage variables have no runtime effect.
 
 ## Related Deep Dives
 
+- [Lifecycle](L2/conversation_lifecycle.md)
 - [Tokens](L2/token_model.md)
-- [Transcript pipeline](L2/transcript_pipeline.md)
 - [Agent configuration](L2/invite_agent_config.md)

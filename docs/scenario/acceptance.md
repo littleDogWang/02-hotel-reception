@@ -1,31 +1,25 @@
-# Hotel reception acceptance criteria
+# Conversation-Only Acceptance
 
-## Required checks
+## Local regression
 
-- Static FAQ questions receive direct answers.
-- Availability questions invoke the simulated lookup and use its response.
-- Missing room types or failed lookups do not produce fabricated availability.
-- For booking requests, the Agent explains that no booking has been created and suggests contacting the front desk.
-- The Agent never claims it has submitted a callback or initiated a human transfer.
-- A stay includes check-in and excludes checkout; availability is the minimum nightly count.
-- Local HTTP results match the editable `hotel.json`; missing records are unknown, not zero.
+- Run pnpm run verify.
+- A mocked Agent starts with only requester_id and channel_name.
+- Setting the former business-tool origin must not enable tools or create data state.
+- Business API routes return HTTP 410 and old data workbenches are not rendered.
 
-## Suggested cases
+## Browser checks
 
-1. Ask about check-in time and breakfast policy.
-2. Check availability for a specified date.
-3. Request a room type with no availability.
-4. Simulate a PMS mock timeout.
-5. Request a reservation and confirm that neither a booking nor a human callback is claimed.
-6. Check standard king rooms from today to the day after tomorrow: two rooms across two occupied nights.
-7. Check family suites for the same stay: zero due to tomorrow being sold out.
-8. Check today + 6 days to today + 8 days: unknown because today + 7 days has no record.
-9. Modify an inventory count in `hotel.json` during local development; repeat the HTTP query and verify the changed count, then restore the fixture.
-10. Simulate December, month/year boundaries and hotel-local midnight; the same offset counts must resolve to the corresponding calendar dates without modifying JSON.
+- Desktop and mobile initial Dialog, Preview first and persistent identity identify this scenario.
+- The start control is enabled without a business record or shopping session.
+- The first application request on start is the token request, with no business API call.
+- A failed token/invite is reported honestly and allows a retry.
 
-## Evidence
+## Real voice checks
 
-- FAQ/availability fixtures.
-- Tool responses and final statements.
-- Local HTTP responses and `pnpm run verify:scenario` output.
-- Actual cloud tool calls and spoken transcripts remain separate acceptance work.
+- Say: What time is check-in and breakfast?
+- Say: I am planning a family stay. Help me think through the room options.
+- Ask for a recap, interrupt, correct an earlier detail and request to stop.
+- The assistant never claims a lookup, saved result or external action.
+- Check actual two-way audio, both transcript roles, microphone controls and clean Agent stop.
+
+Mocked checks and browser screenshots do not establish real speech, model behavior or public deployment acceptance.

@@ -4,24 +4,24 @@ export type { ScenarioPresentation } from '@/types/presentation';
 export const presentation: ScenarioPresentation = {
   "id": "02-hotel-reception",
   "name": "Hotel Reception Assistant",
-  "purpose": "Hotel information and room availability",
+  "purpose": "Scenario voice conversation",
   "headline": [
     "Your stay, made clearer."
   ],
-  "summary": "Ask about hotel services, room availability and reservation options.",
-  "featuresHeading": "Beyond starter",
+  "summary": "Ask about hotel facilities, policies and room preferences in a voice conversation.",
+  "featuresHeading": "In this conversation",
   "features": [
     {
-      "emoji": "🛎️",
-      "title": "Hotel services"
+      "emoji": "💬",
+      "title": "Hotel questions"
     },
     {
-      "emoji": "🛏️",
-      "title": "Room availability"
+      "emoji": "🎙️",
+      "title": "Room preference discussion"
     },
     {
-      "emoji": "📋",
-      "title": "Reservation guidance"
+      "emoji": "📝",
+      "title": "Verbal stay recap"
     }
   ],
   "builtWith": [
@@ -30,22 +30,22 @@ export const presentation: ScenarioPresentation = {
     "Next.js"
   ],
   "startLabel": "Talk to hotel reception",
-  "boundaryShort": "Information and availability only. No confirmed reservation or payment.",
+  "boundaryShort": "Conversation only. No availability lookup, booking or saved guest record.",
   "outcomes": [
     {
-      "id": "answered",
-      "label": "My questions were answered"
+      "id": "helpful",
+      "label": "The conversation helped"
     },
     {
-      "id": "needs-help",
-      "label": "I need more help"
+      "id": "needs-guidance",
+      "label": "I need more guidance"
     }
   ],
   "developer": {
-    "sourceUrl": "https://github.com/AgoraIO-Conversational-AI/agent-quickstart-nextjs",
-    "runCommand": "pnpm install\nagora login\nagora project use <your-project>\nagora project env write .env.local\npnpm dev",
+    "sourceUrl": "https://github.com/littleDogWang/02-hotel-reception",
+    "runCommand": "pnpm install --frozen-lockfile\npnpm run doctor\npnpm run dev",
     "skillsCommand": "npx skills add github:AgoraIO/skills",
-    "assistantPrompt": "Use Agora Skills to work in the existing 02-hotel-reception scenario checkout. Preserve the working Agora session lifecycle and business contracts. Help me adapt its business data and assistant instructions for my workflow.",
+    "assistantPrompt": "Work in this existing 02-hotel-reception voice demo. Preserve Agora RTC/RTM lifecycle and the conversation-only first-version boundary. Adapt the assistant instructions and static public background without adding business tools, records, data APIs or persistence.",
     "docsUrl": "https://docs.agora.io/en/ai/build/build-server-client",
     "sdkUrl": "https://www.npmjs.com/package/agora-agents",
     "consoleUrl": "https://console.agora.io/",
@@ -53,25 +53,19 @@ export const presentation: ScenarioPresentation = {
     "skillsUrl": "https://github.com/AgoraIO/skills",
     "extensionPoints": [
       {
-        "title": "Change assistant instructions",
+        "title": "Change the conversation",
         "path": "lib/agent-config.ts"
       },
       {
-        "title": "Adapt hotel.json",
-        "path": "lib/hotel-reception/hotel.json"
-      },
-      {
         "title": "Choose models and voice",
-        "path": "app/api/invite-agent/route.ts"
+        "path": "lib/runtime-profile.ts"
       },
       {
-        "title": "Adapt scenario UI content",
+        "title": "Adapt scenario UI copy",
         "path": "lib/presentation.ts"
       }
     ]
   }
 };
 
-export function getScenarioPresentation(): ScenarioPresentation {
-  return presentation;
-}
+export function getScenarioPresentation(): ScenarioPresentation { return presentation; }

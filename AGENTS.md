@@ -11,19 +11,15 @@ Use a United States setting for fictional business examples, UI copy, Agent cont
 
 Use English for repository content, including documentation, code comments, UI copy and examples. Keep future additions and edits free of Chinese text.
 
+
+## First-version scope
+
+Ask about hotel facilities, policies and room preferences in a voice conversation.
+
+This first version is conversation-only. No business data lookup, external tools, database, record writes, saved results, or cross-session business history are available. Keep user-provided details only in the current conversation. Never claim an order, appointment, registration, feedback submission, callback, payment, shipment or other external action was created, saved or completed. Offer a verbal summary and explain the appropriate human next step instead. Do not request passwords, verification codes, payment details or unnecessary personal identifiers.
+
+
 ## How to Load
-
-Hotel scenario data lives in `lib/hotel-reception/hotel.json`; keep it
-self-contained. The local room-status API supports `room_type` plus `date`, or
-`check_in`/`check_out` for 1–31 nights (checkout excluded). Missing data is unknown,
-not zero. Inventory uses `dayOffset` from hotel-local today by default so it does
-not expire; explicit `date` rows are allowed for fixed-date tests. Do not put both
-fields on a row or create duplicate resolved dates. `lookup_room_status` uses the
-same API and reads one night per call.
-Inventory stays out of the prompt; FAQ, room IDs and the hotel-local current date
-are included. Do not claim booking, callback submission or human transfer: no
-such action tool exists. Run `pnpm run verify:scenario` after hotel changes.
-
 
 This repository uses progressive disclosure documentation. Docs live under `docs/ai/` in three levels.
 
@@ -52,19 +48,19 @@ The sections below (Start Here, Patterns, Anti-Patterns, etc.) remain the canoni
 - UI components: vendored agent-ui source, scenario-01 theme, application-owned activity canvas; see THIRD_PARTY_NOTICES.md.
 - Server SDK: `agora-agents` for managed agent session startup
 - API routes: token generation, agent invite, chat, and stop routes live in `app/api`
-- Default agent config: Agora-managed STT, LLM and TTS. `.env.local` requires the two Agora project credentials; optional scenario variables are documented in README.
+- Default agent config: Agora-managed STT, LLM and TTS. `.env.local` requires the two Agora project credentials; no business callback or storage configuration is used.
 
 ## Supported Modes
 
-Local development runs one Next.js process at http://localhost:3000 using `.env.local`. Native production uses `pnpm run build` then `pnpm run start`. Docker runs the same app as non-root UID 1001 on port 3000, without a reverse proxy inside the image. The voice app and read-only inventory route can share a Next.js deployment. The route reads packaged hotel.json on each request. Editing inventory on a writable local server is visible to API calls without restart; changing a hosted bundle requires redeployment. Start a fresh conversation after prompt-data changes.
+The browser uses Agora RTC for audio and RTM for transcript and Agent events. Next.js only signs credentials and starts/stops the managed Agent. No business session, data API, local file store or persistent application database is required. Native Node.js, Docker and a Next.js-compatible serverless deployment use the same conversation flow. Actual hosted voice acceptance remains a separate check.
 
-Use Node.js 22+ and pnpm 9.15.9. The tracked example is `env.local.example`; local Next.js uses `.env.local`. Docker embeds the public App ID at build time, accepts the certificate only at runtime, and keeps the writable data directory owned by UID 1001. Run `pnpm run verify:docker` separately from `pnpm run verify`; see [README deployment](README.md#deployment).
+Use Node.js 22+ and pnpm 9.15.9. Copy env.local.example to .env.local only when absent. Supply the public App ID at build and runtime and keep the App Certificate server-only. Run pnpm run verify:docker separately for container acceptance.
 
 ## Routing / Ownership
 
 - UI and RTC/RTM client lifecycle live in `components`.
 - Browser-facing API routes live in `app/api`.
-- Constants, Agent config/tools, presentation and business modules live in `lib`; this repo owns its complete implementation.
+- Constants, Agent configuration, empty tools, presentation and static reference material live in `lib`; this repo owns its complete implementation.
 - Types live in `types`; business documentation lives in `docs/scenario`. Do not reintroduce a root multi-scenario registry.
 - If a workflow, request contract, or ownership boundary changes, update `README.md`, `AGENTS.md`, and the relevant `docs/ai/` files in the same change.
 
@@ -237,12 +233,10 @@ Before finishing a change:
 The generator and tester live in the [AgoraIO-Community/ai-devkit](https://github.com/AgoraIO-Community/ai-devkit) skill set. See the [progressive disclosure standard](https://github.com/AgoraIO-Community/ai-devkit/blob/main/docs/progressive-disclosure-standard.md) for the full specification.
 
 
-## Local conversation and optional tools
+## Conversation-only first version
 
-Default conversations append hotel.json FAQ, room types and dated fictional room counts to the prompt. dayOffset is resolved against the hotel-local date at session start. For a stay, include check-in, exclude check-out and take the minimum nightly count; missing dates are unknown. No booking or callback is submitted. With a public HTTPS tool origin, omit inline counts and require successful room-status results; tool failure cannot fall back to fixed counts.
+This first version is conversation-only. No business data lookup, external tools, database, record writes, saved results, or cross-session business history are available. Keep user-provided details only in the current conversation. Never claim an order, appointment, registration, feedback submission, callback, payment, shipment or other external action was created, saved or completed. Offer a verbal summary and explain the appropriate human next step instead. Do not request passwords, verification codes, payment details or unnecessary personal identifiers.
 
-TOP_TEN_SCENARIO_TOOL_BASE_URL is optional. Only an explicitly configured public HTTPS endpoint enables tools; malformed, HTTP, localhost and local/private origins leave tools disabled. URL validation does not prove network reachability. No tunnel, knowledge base or database is needed for the default conversation. Local checks do not establish live speech or cloud callback acceptance.
+## Scenario UI alignment
 
-## Scenario 01 UI alignment (2026-10-21)
-
-The local `LandingPage` UI helpers compose the entry, persistent identity, activity workspace, Inspector and Build panels around existing session bootstrap. `lib/presentation.ts` loads scenario-specific content. `ConversationComponent` reports actual activity/inspection events and uses the adopted transcript and Glass controls. Business views remain scenario-owned below the voice workspace. Tailwind 4/PostCSS, theme recipes and MiSans match scenario 01. `lib/runtime-profile.ts` displays the non-secret configured pipeline; keep it aligned with the invite route. Never treat browser fixtures as live RTC/tool acceptance.
+The local `LandingPage` UI helpers compose the entry, persistent identity, activity workspace, Inspector and Build panels around existing session bootstrap. `lib/presentation.ts` loads scenario-specific content. `ConversationComponent` reports actual activity/inspection events and uses the adopted transcript and Glass controls. No business forms, saved-result panels or data workbenches are included. Tailwind 4/PostCSS, theme recipes and MiSans match scenario 01. `lib/runtime-profile.ts` displays the non-secret configured pipeline; keep it aligned with the invite route. Never treat browser fixtures as live RTC/tool acceptance.
