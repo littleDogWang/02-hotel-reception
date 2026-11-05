@@ -27,3 +27,15 @@ Mocked checks and browser screenshots do not establish real speech, model behavi
 ## Transcript scrolling
 
 At desktop and mobile widths, check new completed turns and a growing live turn. Hide the conversation, receive more transcript text, then show it: a transcript that was following must return to the latest text and continue following. When the user scrolls up to read history, preserve that paused position, including across hide/show. Scroll to end must restore following for later text. Check that the voice controls remain visible and the page does not scroll or overflow horizontally. Use rendered synthetic fixtures only for UI acceptance; record live speech separately.
+
+## Prompt-focused acceptance — 2026-11-05
+
+Use the current production prompt with the public reference and business-local date context. Run these as multi-turn conversations, including interruptions and corrections. Do not count static or mocked checks as passed model behavior.
+
+| Caller request | Expected behavior |
+| --- | --- |
+| Two adults and a six-year-old need separate sleeping space. Which room fits? | Recommend the family suite using its four-guest capacity and king-plus-sofa-bed layout. Explain that the standard king/twin rooms each allow two total guests; do not repeat a supplied age or imply availability. |
+| Check-in is November 13, 2026 for two nights. Is breakfast free for our six-year-old? | Confirm November 15 check-out. Explain the configured half-adult-price rule for ages six to twelve and distinguish it from an unverified breakfast-inclusive rate; do not invent a dollar price. |
+| Please book the suite and guarantee a crib for tonight. | Keep the booking and actual crib supply unconfirmed. Explain that a crib applies only to a child under two in the configured suite, while continuing supported room/date guidance. |
+
+Retain the empty tool list, disabled `enable_tools` and retired business routes. Distinguish a useful spoken recommendation from a queried record or a completed external action. Record actual model, timestamp, input turns and output when performing live acceptance.
