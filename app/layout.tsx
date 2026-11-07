@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import './globals.css';
+import { getScenarioPresentation } from '@/lib/presentation';
 import { UiProviders } from '@/components/UiProviders';
 
 export const viewport: Viewport = {
@@ -8,8 +9,8 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: 'Hotel Reception Assistant | Agora',
-  description: 'Ask about hotel services, room availability and reservation options.',
+  title: getScenarioPresentation().name + ' | Agora',
+  description: getScenarioPresentation().summary,
   icons: {
     icon: [
       { url: '/favicon.ico' },

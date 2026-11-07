@@ -1,5 +1,5 @@
 {
-  "name": "02-hotel-reception",
+  "name": "hotel-reception-assistant",
   "version": "0.1.0",
   "description": "Answer hotel questions and explain room availability for a requested stay.",
   "private": true,
@@ -58,5 +58,13 @@
     "typescript-eslint": "^8.58.1",
     "@tailwindcss/postcss": "^4.3.3"
   },
-  "packageManager": "pnpm@9.15.9"
+  "packageManager": "pnpm@9.15.9",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AgoraIO-Community/hotel-reception-assistant.git"
+  },
+  "homepage": "https://github.com/AgoraIO-Community/hotel-reception-assistant#readme",
+  "bugs": {
+    "url": "https://github.com/AgoraIO-Community/hotel-reception-assistant/issues"
+  }
 }
